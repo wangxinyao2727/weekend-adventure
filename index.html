@@ -1,0 +1,733 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>周末大冒险 · 城市探索指南</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{background:#1e1e2e;color:#fff;font-family:"Microsoft YaHei","PingFang SC",sans-serif}
+body{background-image:radial-gradient(circle at 20% 10%,rgba(167,139,250,.12) 0 2px,transparent 3px),radial-gradient(circle at 70% 30%,rgba(78,205,196,.1) 0 2px,transparent 3px),radial-gradient(circle at 40% 80%,rgba(255,217,61,.08) 0 2px,transparent 3px);background-size:90px 90px}
+.wrap{max-width:760px;margin:0 auto;padding:16px 14px 60px}
+.pxbox{border:4px solid #000;box-shadow:5px 5px 0 rgba(0,0,0,.55);background:#2d2d44}
+h1.logo{font-size:26px;text-align:center;padding:14px 8px 4px;letter-spacing:2px;text-shadow:3px 3px 0 #000;color:#ffd93d}
+.sub{text-align:center;font-size:12px;color:#b9b9d6;padding-bottom:12px;letter-spacing:1px}
+.tabs{display:flex;gap:8px;margin:14px 0;flex-wrap:wrap}
+.tab{flex:1;min-width:120px;text-align:center;padding:10px 6px;border:4px solid #000;box-shadow:4px 4px 0 rgba(0,0,0,.55);background:#4ecdc4;color:#1d1d2e;font-weight:bold;cursor:pointer;font-size:14px;user-select:none}
+.tab.on{background:#ffd93d;transform:translate(2px,2px);box-shadow:2px 2px 0 rgba(0,0,0,.55)}
+.panel{display:none}
+.panel.on{display:block;animation:pop .18s steps(4)}
+@keyframes pop{from{transform:scale(.96);opacity:.4}to{transform:scale(1);opacity:1}}
+.card{padding:14px;margin-bottom:14px;border-radius:0}
+h2{font-size:18px;color:#ffd93d;margin-bottom:8px;text-shadow:2px 2px 0 #000}
+.lbl{font-size:13px;color:#b9b9d6;margin:8px 0 4px}
+.row{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px}
+.chip{padding:6px 10px;border:2px solid #000;background:#1d1d2e;color:#fff;font-size:13px;cursor:pointer;box-shadow:2px 2px 0 rgba(0,0,0,.5)}
+.chip.on{background:#ffd93d;color:#1d1d2e;transform:translate(2px,2px);box-shadow:1px 1px 0 rgba(0,0,0,.5)}
+input[type=range]{width:100%;margin:6px 0}
+.budget{color:#4ecdc4;font-weight:bold;text-shadow:1px 1px 0 #000}
+.btn{display:block;width:100%;padding:14px;border:4px solid #000;background:#a78bfa;color:#1d1d2e;font-size:16px;font-weight:bold;cursor:pointer;box-shadow:5px 5px 0 rgba(0,0,0,.55);letter-spacing:1px;margin:10px 0}
+.btn:active{transform:translate(3px,3px);box-shadow:2px 2px 0 rgba(0,0,0,.55)}
+.btn.gold{background:#ffd93d}
+.btn.cy{background:#4ecdc4}
+.btn.pink{background:#ff6b9d;color:#fff}
+.mini{display:inline-block;padding:8px 12px;border:3px solid #000;background:#1d1d2e;color:#fff;font-size:13px;cursor:pointer;box-shadow:3px 3px 0 rgba(0,0,0,.5);margin:6px 6px 6px 0}
+.mini.gold{background:#ffd93d;color:#1d1d2e}
+.mini.cy{background:#4ecdc4;color:#1d1d2e}
+.mini.pink{background:#ff6b9d;color:#fff}
+.r{position:relative;padding:12px;border:3px solid #000;background:#1d1d2e;margin:10px 0;box-shadow:4px 4px 0 rgba(0,0,0,.55)}
+.r .tag{position:absolute;top:-10px;left:10px;background:#ffd93d;color:#1d1d2e;font-size:11px;font-weight:bold;padding:2px 8px;border:2px solid #000}
+.r .tag.s2{background:#4ecdc4}
+.r .tag.s3{background:#ff6b9d;color:#fff}
+.r h3{font-size:16px;color:#fff;margin:4px 0 6px}
+.r .meta{font-size:12px;color:#b9b9d6;margin-bottom:8px}
+.r .why{background:#2d2d44;border-left:3px solid #ffd93d;padding:8px 10px;font-size:13px;line-height:1.6;color:#fff}
+.r .why b{color:#ffd93d}
+.fated{border-color:#ffd93d;box-shadow:4px 4px 0 rgba(255,217,61,.5)}
+.stat{display:flex;gap:8px;flex-wrap:wrap;margin:8px 0 14px}
+.stat .s{padding:8px 12px;border:3px solid #000;background:#1d1d2e;font-size:13px;box-shadow:3px 3px 0 rgba(0,0,0,.5)}
+.stat .s b{color:#ffd93d;font-size:18px;display:block}
+.luck{padding:10px;border:3px solid #000;background:linear-gradient(135deg,#2d2d44,#1d1d2e);margin:10px 0;box-shadow:4px 4px 0 rgba(0,0,0,.55)}
+.luck .row2{display:flex;gap:8px;flex-wrap:wrap;margin-top:6px}
+.luck .pill{padding:4px 8px;background:#ffd93d;color:#1d1d2e;font-size:12px;font-weight:bold;border:2px solid #000}
+.luck .pill.c{background:#4ecdc4}
+.luck .pill.p{background:#ff6b9d;color:#fff}
+.luck .pill.o{background:#ff9f43;color:#1d1d2e}
+#tarotArea{min-height:200px;display:flex;align-items:center;justify-content:center;padding:20px;position:relative}
+.tarotcard{width:120px;height:180px;border:4px solid #000;background:linear-gradient(135deg,#a78bfa,#ff6b9d);box-shadow:6px 6px 0 rgba(0,0,0,.6);display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:60px;color:#fff;text-shadow:3px 3px 0 #000;cursor:pointer;transition:transform .6s cubic-bezier(.4,1.4,.6,1);position:relative;user-select:none}
+.tarotcard::before{content:"";position:absolute;top:6px;left:6px;right:6px;bottom:6px;border:2px solid rgba(255,255,255,.4)}
+.tarotcard.flip{transform:rotateY(360deg) scale(1.1)}
+.fatebox{margin-top:16px;padding:14px;border:3px solid #000;background:#ffd93d;color:#1d1d2e;box-shadow:4px 4px 0 rgba(0,0,0,.55);font-size:14px;text-align:center;font-weight:bold}
+.party{padding:10px;background:#2d2d44;border:3px solid #000;margin:8px 0;box-shadow:3px 3px 0 rgba(0,0,0,.5);font-size:13px}
+.party .pname{color:#4ecdc4;font-weight:bold}
+.weekcard{padding:14px;border:3px solid #000;background:linear-gradient(135deg,#2d2d44,#1d1d2e);color:#fff;margin:10px 0;box-shadow:4px 4px 0 rgba(0,0,0,.55);white-space:pre-wrap;font-family:monospace;font-size:13px;line-height:1.7}
+.abt{font-size:13px;line-height:1.7;color:#d1d1e6}
+.abt b{color:#ffd93d}
+.foot{text-align:center;padding:24px 8px 8px;color:#6c6c8a;font-size:11px;letter-spacing:1px}
+.toast{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%) scale(.8);padding:12px 20px;border:3px solid #000;background:#ffd93d;color:#1d1d2e;font-weight:bold;font-size:14px;box-shadow:5px 5px 0 rgba(0,0,0,.5);opacity:0;pointer-events:none;z-index:99;transition:.25s}
+.toast.show{opacity:1;transform:translate(-50%,-50%) scale(1)}
+.toast.err{background:#ff6b9d;color:#fff}
+/* 星空 canvas */
+canvas#starfield{position:fixed;top:0;left:0;width:100%;height:100%;z-index:1;pointer-events:none}
+/* 扫描线 */
+.scanline{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:2;background:repeating-linear-gradient(0deg,rgba(0,0,0,0) 0px,rgba(0,0,0,0) 2px,rgba(0,0,0,.12) 3px,rgba(0,0,0,0) 4px);mix-blend-mode:multiply;animation:scanmove 8s linear infinite}
+@keyframes scanmove{from{transform:translateY(-100%)}to{transform:translateY(100%)}}
+/* 像素小动物（CSS 像素艺术 + box-shadow + keyframes） */
+.npc{position:fixed;z-index:3;pointer-events:none;image-rendering:pixelated}
+.npc .sp{width:8px;height:8px;background:transparent;position:relative}
+.npc .sp::before,.npc .sp::after{content:"";position:absolute;width:8px;height:8px}
+/* 通用 walk 动画：上下浮动 + 左右微摆 */
+@keyframes walkx{0%{transform:translate(0,0)}50%{transform:translate(-2px,0)}100%{transform:translate(0,0)}}
+@keyframes walky{0%{transform:translate(0,0)}50%{transform:translate(0,-2px)}100%{transform:translate(0,0)}}
+
+/* 像素小猫（橙色，16x16） */
+.npc.cat{bottom:18px;left:-40px;animation:catmove 38s linear infinite}
+.npc.cat .sp{background:#ff9f43;box-shadow:8px 0 0 #ff9f43,16px 0 0 #ff9f43,24px 0 0 #ff9f43,-8px 8px 0 #ff9f43,0 8px 0 #ff9f43,8px 8px 0 #ff9f43,16px 8px 0 #ff9f43,24px 8px 0 #ff9f43,-8px 16px 0 #ff9f43,0 16px 0 #ff9f43,8px 16px 0 #ff9f43,16px 16px 0 #ff9f43,24px 16px 0 #fff,-8px 24px 0 #ff9f43,0 24px 0 #1d1d2e,8px 24px 0 #ff9f43,16px 24px 0 #1d1d2e,24px 24px 0 #ff9f43;animation:walkx .5s steps(2) infinite}
+.npc.cat::after{content:"🐾";position:absolute;bottom:-6px;right:-12px;font-size:10px;opacity:.5}
+@keyframes catmove{0%{left:-40px;bottom:18px}50%{bottom:36px}100%{left:110%;bottom:18px}}
+
+/* 像素小狐狸（红色+白尖） */
+.npc.fox{top:80px;right:-40px;animation:foxmove 45s linear infinite}
+.npc.fox .sp{background:#e74c3c;box-shadow:8px 0 0 #e74c3c,16px 0 0 #e74c3c,24px 0 0 #fff,-8px 8px 0 #e74c3c,0 8px 0 #e74c3c,8px 8px 0 #ffd93d,16px 8px 0 #e74c3c,24px 8px 0 #fff,-8px 16px 0 #e74c3c,0 16px 0 #e74c3c,8px 16px 0 #e74c3c,16px 16px 0 #e74c3c,24px 16px 0 #e74c3c,0 24px 0 #1d1d2e,8px 24px 0 #e74c3c,16px 24px 0 #1d1d2e,24px 24px 0 #e74c3c;animation:walkx .5s steps(2) infinite}
+.npc.fox::after{content:"✨";position:absolute;top:-14px;left:-4px;font-size:10px;color:#ffd93d;animation:twinkle 1.2s ease-in-out infinite}
+@keyframes foxmove{0%{right:-40px;top:80px}50%{top:120px}100%{right:110%;top:80px}}
+
+/* 像素小兔子（白色+粉） */
+.npc.rab{top:40%;left:-40px;animation:rabmove 52s linear infinite}
+.npc.rab .sp{background:#fff;box-shadow:8px -8px 0 #fff,16px -8px 0 #fff,-8px 0 0 #fff,0 0 0 #fff,8px 0 0 #fff,16px 0 0 #fff,24px 0 0 #fff,-8px 8px 0 #fff,0 8px 0 #ff6b9d,8px 8px 0 #fff,16px 8px 0 #ff6b9d,24px 8px 0 #fff,-8px 16px 0 #fff,0 16px 0 #fff,8px 16px 0 #fff,16px 16px 0 #fff,24px 16px 0 #fff,0 24px 0 #fff,8px 24px 0 #fff,16px 24px 0 #fff;animation:walkx .4s steps(2) infinite}
+@keyframes rabmove{0%{left:-40px;top:40%}50%{top:42%}100%{left:110%;top:40%}}
+
+/* 跳跳小星星精灵（漂浮+旋转） */
+.npc.star{position:fixed;z-index:3;pointer-events:none;font-size:18px;animation:bob 3s ease-in-out infinite}
+.npc.star.s2{font-size:14px;animation-duration:2.4s;animation-delay:.6s}
+.npc.star.s3{font-size:16px;animation-duration:3.6s;animation-delay:1.2s}
+@keyframes bob{0%,100%{transform:translateY(0) rotate(0)}50%{transform:translateY(-14px) rotate(15deg)}}
+.npc.star.s2{animation-name:bob2}
+@keyframes bob2{0%,100%{transform:translateY(0) rotate(0)}50%{transform:translateY(-10px) rotate(-15deg)}}
+
+/* 流星 */
+.shootstar{position:fixed;width:80px;height:2px;background:linear-gradient(90deg,transparent,#fff,#ffd93d);z-index:3;pointer-events:none;opacity:0;transform:rotate(-25deg);animation:shoot 6s linear infinite}
+@keyframes shoot{0%{opacity:0;transform:translate(0,0) rotate(-25deg)}5%{opacity:1}50%{opacity:1}100%{opacity:0;transform:translate(420px,260px) rotate(-25deg)}}
+
+/* 霓虹招牌 */
+.neon{position:fixed;font-family:monospace;font-weight:bold;letter-spacing:2px;z-index:3;pointer-events:none;animation:flicker 3s ease-in-out infinite}
+.neon.tl{top:14px;left:14px;color:#ff6b9d;font-size:14px;text-shadow:0 0 8px #ff6b9d,0 0 16px #ff6b9d,2px 2px 0 #000}
+.neon.tr{top:14px;right:14px;color:#4ecdc4;font-size:12px;text-shadow:0 0 8px #4ecdc4,0 0 16px #4ecdc4,2px 2px 0 #000;animation-duration:4s;animation-delay:1s}
+.neon.bl{bottom:14px;left:14px;color:#a78bfa;font-size:11px;text-shadow:0 0 8px #a78bfa,0 0 16px #a78bfa,2px 2px 0 #000;animation-duration:5s;animation-delay:.5s}
+@keyframes flicker{0%,100%{opacity:1}50%{opacity:.6}}
+
+/* 漂浮云 */
+.npc.cloud{position:fixed;z-index:3;pointer-events:none;font-size:32px;opacity:.4;animation:clouddrift 50s linear infinite}
+.npc.cloud.c2{top:60%;animation-duration:70s;animation-delay:-25s;font-size:24px}
+@keyframes clouddrift{from{left:-50px}to{left:110%}}
+
+/* 闪光粒子 */
+.sparkle{position:fixed;z-index:3;pointer-events:none;font-size:10px;color:#ffd93d;text-shadow:0 0 6px #ffd93d;animation:twinkle 2s ease-in-out infinite}
+@keyframes twinkle{0%,100%{opacity:.2;transform:scale(.7)}50%{opacity:1;transform:scale(1.2)}}
+
+/* 抽卡结果 - 命定活动卡 */
+.tarot-res{padding:14px;border:3px solid #ffd93d;background:linear-gradient(135deg,#1d1d2e,#2d2d44);box-shadow:4px 4px 0 rgba(255,217,61,.5);margin-top:12px}
+.tarot-res h3{color:#ffd93d;font-size:16px;margin:4px 0 6px}
+.tarot-res .res-meta{font-size:12px;color:#b9b9d6;margin-bottom:8px}
+.tarot-res .res-why{background:rgba(255,217,61,.08);border-left:3px solid #ffd93d;padding:8px 10px;font-size:13px;line-height:1.6;color:#fff}
+
+/* 项目文档 Tab 专用样式 */
+.doc-section{margin:10px 0;padding:12px;background:#1d1d2e;border:2px solid #000;box-shadow:3px 3px 0 rgba(0,0,0,.5)}
+.doc-section h3{font-size:14px;color:#4ecdc4;margin-bottom:6px;text-shadow:1px 1px 0 #000}
+.doc-section h4{font-size:13px;color:#ffd93d;margin:6px 0 4px}
+.doc-section .ditem{font-size:13px;line-height:1.7;margin:4px 0;color:#d1d1e6}
+.doc-section .ditem b{color:#ffd93d}
+.doc-section ul{padding-left:20px;margin:4px 0}
+.doc-section li{font-size:13px;line-height:1.8;color:#d1d1e6}
+.doc-section .prompt-box{background:#0d0d1a;border-left:3px solid #a78bfa;padding:8px 10px;margin:6px 0;font-family:monospace;font-size:12px;color:#b9b9d6;line-height:1.6;white-space:pre-wrap;word-break:break-all}
+.doc-section .iter-box{background:#2d2d44;border:2px solid #a78bfa;padding:8px 10px;margin:6px 0;font-size:12px;color:#d1d1e6;line-height:1.7}
+.doc-section .iter-box b{color:#a78bfa}
+.priority-pill{display:inline-block;padding:2px 8px;background:#ffd93d;color:#1d1d2e;font-size:11px;font-weight:bold;border:2px solid #000;margin-right:6px}
+.priority-pill.p1{background:#ff6b9d;color:#fff}
+.priority-pill.p2{background:#4ecdc4;color:#1d1d2e}
+.priority-pill.p3{background:#a78bfa;color:#fff}
+</style>
+</head>
+<body>
+<canvas id="starfield"></canvas>
+<div class="scanline"></div>
+
+<!-- 像素小动物 -->
+<div class="npc cat"><div class="sp"></div></div>
+<div class="npc fox"><div class="sp"></div></div>
+<div class="npc rab"><div class="sp"></div></div>
+
+<!-- 漂浮小星星 -->
+<div class="npc star" style="top:14%;left:8%">⭐</div>
+<div class="npc star s2" style="top:18%;right:10%">🌟</div>
+<div class="npc star s3" style="top:45%;left:3%">✨</div>
+<div class="npc star" style="top:32%;right:4%;animation-delay:1.8s">🌙</div>
+
+<!-- 闪光粒子 -->
+<div class="sparkle" style="top:25%;left:50%">·✦·</div>
+<div class="sparkle" style="top:55%;left:15%;animation-delay:.8s">·✧·</div>
+<div class="sparkle" style="top:70%;right:18%;animation-delay:1.5s">✦</div>
+
+<!-- 云 -->
+<div class="npc cloud" style="top:25%">☁️</div>
+<div class="npc cloud c2" style="">☁️</div>
+
+<!-- 霓虹招牌 -->
+<div class="neon tl">✦ PIXEL CITY</div>
+<div class="neon tr">// 探索模式</div>
+<div class="neon bl">v3 · 星河版</div>
+
+<div class="wrap">
+  <h1 class="logo">周末大冒险 ✦ CITY EXPLORER</h1>
+  <div class="sub">▸ 你的周末，由星座与运势决定 ◂</div>
+
+  <div class="tabs">
+    <div class="tab on" data-p="p1">① 开局设定</div>
+    <div class="tab" data-p="p2">② 我的推荐</div>
+    <div class="tab" data-p="p3">③ 抽卡转运</div>
+    <div class="tab" data-p="p4">④ 打卡足迹</div>
+    <div class="tab" data-p="p5">⑤ 项目文档</div>
+  </div>
+
+  <div class="panel on" id="p1">
+    <div class="pxbox card">
+      <h2>✦ 冒险者档案</h2>
+      <div class="lbl">你的星座（激活今日幸运加成）</div>
+      <div class="row" id="zrow"></div>
+
+      <div class="lbl">今日心情偏好</div>
+      <div class="row" id="prow"></div>
+
+      <div class="lbl">同行人数 · 预算（元） <span class="budget" id="budv">¥150</span></div>
+      <input type="range" id="budr" min="0" max="500" step="20" value="150">
+      <div class="row" id="peorow">
+        <div class="chip on" data-pp="1">1人</div>
+        <div class="chip" data-pp="2">2人</div>
+        <div class="chip" data-pp="3">3人+</div>
+        <div class="chip" data-pp="0">一群人</div>
+      </div>
+
+      <div class="lbl">今日天气</div>
+      <div class="row" id="wrow">
+        <div class="chip on" data-w="sunny">☀️ 晴</div>
+        <div class="chip" data-w="cloudy">⛅ 多云</div>
+        <div class="chip" data-w="rainy">🌧️ 雨</div>
+      </div>
+
+      <div class="luck" id="luckBox" style="display:none">
+        <div style="color:#ffd93d;font-weight:bold;font-size:13px">✦ 今日运势（按日期+星座生成，同一天结果一致）</div>
+        <div class="row2" id="luckList"></div>
+      </div>
+
+      <button class="btn gold" onclick="recommend()">✦ 开始冒险 · 推荐我的周末 ✦</button>
+    </div>
+
+    <div class="pxbox card">
+      <h2>🗺️ 你的推荐地图</h2>
+      <div class="lbl">点击「开始冒险」生成专属 Top 3</div>
+      <div id="reswrap"><div class="abt" style="color:#6c6c8a;text-align:center;padding:20px">—— 等待你的冒险 ——</div></div>
+    </div>
+  </div>
+
+  <div class="panel" id="p2">
+    <div class="pxbox card">
+      <h2>✦ 本周 Top 3 推荐</h2>
+      <div id="reswrap2"></div>
+    </div>
+  </div>
+
+  <div class="panel" id="p3">
+    <div class="pxbox card">
+      <h2>✦ 抽卡转运 · 命定周末</h2>
+      <div class="lbl">选择困难症救星：翻一张塔罗，命运给你答案</div>
+      <div id="tarotArea">
+        <div class="tarotcard" onclick="draw()">🃏<br><span style="font-size:11px">点击翻牌</span></div>
+      </div>
+      <div id="tarotRes"></div>
+    </div>
+  </div>
+
+  <div class="panel" id="p4">
+    <div class="pxbox card">
+      <h2>✦ 冒险者足迹</h2>
+      <div class="stat" id="stat"></div>
+      <div id="cklist"></div>
+      <div id="sharearea"></div>
+    </div>
+  </div>
+
+  <div class="panel" id="p5">
+    <div class="pxbox card">
+      <h2>📖 项目文档 · PRD 与 AI 协作记录</h2>
+      <div class="abt" style="margin-bottom:10px">本作品完整的产品方案、需求取舍、Prompt 草稿、迭代修复记录全部沉淀在此页。<b>评卷人无需跳转外链</b>，看完这一页就能理解我做产品的全过程。</div>
+
+      <div class="doc-section">
+        <h3>一、PRD · 一页产品需求</h3>
+
+        <div class="ditem"><b>痛点</b>：大学生周末决策成本高——去哪玩、几个人去、天气/预算影响大，朋友圈/小红书信息分散且不可量化。</div>
+
+        <div class="ditem"><b>目标用户</b>：西安本地大学生（单人/情侣/小团体），预算敏感，时间集中在周六日。</div>
+
+        <div class="ditem"><b>核心场景</b>：周五晚上花 1 分钟填偏好 → 拿到 3 个有理由的活动推荐 → 现场打卡 → 一键生成攻略分享卡。</div>
+
+        <div class="ditem"><b>功能优先级</b>（取舍依据：先把"推荐闭环"做扎实，再扩周边）：</div>
+        <ul>
+          <li><span class="priority-pill">P0</span><b>推荐引擎</b>：按偏好/预算/天气/人数生成 Top 3，每条带推荐理由（产品主线）</li>
+          <li><span class="priority-pill p2">P1</span><b>星座幸运加成 + 抽卡转运</b>：击中"选择困难症"原话，提升点击与分享</li>
+          <li><span class="priority-pill p2">P1</span><b>打卡记录 + 探索周报分享卡</b>：沉淀个人数据 + 社交裂变激励</li>
+          <li><span class="priority-pill p1">P2</span><b>组队出发</b>：先做"发起+报名"模拟（不接入实时通信，保证 MVP 可跑）</li>
+        </ul>
+
+        <div class="ditem"><b>取舍说明</b>：为什么不做"实时群聊/讨论区/投票"？——这是 MVP，目标是验证"用户能不能用 1 分钟做出周末决策"。实时通信会让后端复杂度过高、不利于个人独立交付，所以降到 P2 模拟。</div>
+
+        <div class="ditem"><b>数据存储</b>：纯前端 localStorage（打卡/组队/分享历史），无需后端，符合题目"使用 AI Coding 工具"的单人交付约束。</div>
+      </div>
+
+      <div class="doc-section">
+        <h3>二、AI 协作全过程（vibe coding 关键）</h3>
+
+        <div class="ditem"><b>协作模式</b>：作者负责「产品方案 + Prompt 设计 + 验收标准」，AI 工具负责「代码生成与调试」。每次需求都按「目标 → 拆解 → Prompt → 验收」四步走（这套方法论来自我实习期间的智能体落地实践）。</div>
+
+        <h4>Prompt 草稿示例</h4>
+        <div class="prompt-box">任务：写一个单页 Web App，主题"周末城市探索指南"。
+输入：用户偏好（星座/活动类型/预算/人数/天气）。
+输出：Top 3 活动推荐 + 每条推荐理由。
+约束：纯前端、localStorage 存储、无后端、可解释推荐（每条都要说为什么推荐你）。
+风格：像素游戏风（致敬星露谷物语）+ 赛博朋克霓虹点缀。
+数据：西安本地真实活动 20 条起步。</div>
+
+        <h4>任务拆解（先拆细，再交给 AI 一次性写完）</h4>
+        <div class="iter-box"><b>Step 1</b> 数据层：定义 ACTS 数组（n/t/io/pr/mp/dir/col/d/dur 8 字段）+ ZODIAC 12 星座 + 评分函数 scoreAct</div>
+        <div class="iter-box"><b>Step 2</b> UI 层：5 个 Tab 框架（开局/推荐/抽卡/打卡/文档） + 表单组件</div>
+        <div class="iter-box"><b>Step 3</b> 推荐引擎：偏好+35 / 预算+25 / 天气+20 / 人数+10 / 方位+15 / 颜色+5</div>
+        <div class="iter-box"><b>Step 4</b> 抽卡：塔罗动画 + 命定 Top 8 随机抽取</div>
+        <div class="iter-box"><b>Step 5</b> 装饰：星空 canvas + 萌宠 CSS 像素艺术 + 粒子流星 + 霓虹招牌 + 扫描线</div>
+
+        <h4>迭代修复记录（每一轮都有测试，不是"应该能用"而是"测过能用"）</h4>
+        <div class="iter-box"><b>v2</b> JS 引号错位导致整页失效 → 修 `encodeURIComponent(txt)+''>` → 节点语法检查 + DOM 桩冒烟测试</div>
+        <div class="iter-box"><b>v3</b> 12 星座幸运方位全相同 + 抽卡重复 + Top3 固定 → 加大星座间隔（z*104729）+ 抽卡改 Top 8 随机 + jitter Math.random()*18 + 活动库 24→54</div>
+        <div class="iter-box"><b>v4-v6</b> 加星露谷装饰（霓虹招牌/扫描线/像素小动物）+ 粒子流星（15-24 颗递减拖尾）+ 萌宠 4 部件独立动画（walk/tailWag/earTwitch/blink/bubble）</div>
+        <div class="iter-box"><b>v7</b> 反思：UI 大改动让用户不适，回退到 v6 备份，恢复原像素风风格。教训：只改用户点名的部分，保留 _vN.html 备份。</div>
+        <div class="iter-box"><b>v8</b> 沉淀 PRD + AI 协作全过程到「项目文档」Tab，让评卷人无需外链即可看到完整产品思考。</div>
+      </div>
+
+      <div class="doc-section">
+        <h3>三、可解释推荐 · 权重表</h3>
+        <ul>
+          <li>偏好匹配（活动类型 = 选中偏好）：<b>+35</b></li>
+          <li>预算内（活动价格 ≤ 当前预算）：<b>+25</b></li>
+          <li>天气适配（雨天+io=1 / 晴天+io=0）：<b>+20</b></li>
+          <li>人数适配（mp 标记与同行人数匹配）：<b>+10</b></li>
+          <li>幸运方位（活动方位 = 今日幸运方位）：<b>+15</b></li>
+          <li>幸运色加成（活动 col = 今日幸运色）：<b>+5</b></li>
+        </ul>
+        <div class="ditem" style="margin-top:6px">Top 3 中每张卡都列出实际命中的权重项，让用户知道"为什么是这三个"。</div>
+      </div>
+
+      <div class="doc-section">
+        <h3>四、自评 · 如果给我 2 周我会补什么</h3>
+        <ul>
+          <li>接入真实天气 API（高德/和风），告别模拟天气开关</li>
+          <li>推荐解释升级为"不推荐项"——告诉用户为什么不选某个活动</li>
+          <li>组队接入实时通信（用 WebSocket 或轻量 IM）</li>
+          <li>活动数据接入大众点评/小红书真实数据流</li>
+          <li>加 A/B 实验框架，验证"抽卡" vs "列表"哪个转化率高</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="pxbox card">
+    <h2>ℹ️ 作品说明</h2>
+    <div class="abt">本作品「周末大冒险 · 城市探索指南」为 AI Coding 协作完成：作者负责产品方案设计（场景拆解 / 推荐规则与权重 / 星座运势玩法 / 交互原型与验收标准），AI 工具负责代码生成与调试。<br>
+    推荐逻辑为<b>可解释的规则打分引擎</b>：偏好匹配 +35 / 预算内 +25 / 天气适配 +20 / 人数适配 +10 / 幸运方位 +15 / 幸运色 +5，每个推荐都附「为什么推荐你」。<br>
+    数据存储于本地浏览器（localStorage），无服务器。活动信息为演示数据。<br>
+    完整 PRD 与 AI 协作全过程见 <b>⑤ 项目文档 Tab</b>。</div>
+  </div>
+
+  <div class="foot">MADE WITH AI CODING · VIBE CODING 笔试作品 · 王馨瑶</div>
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+var ACTS=[
+{n:"陕西历史博物馆·大唐遗宝特展",t:"展览",io:1,pr:0,mp:1,dir:"东南",col:"金",d:"何家村窖藏金器，免费预约",dur:"3h"},
+{n:"大唐不夜城夜景+不倒翁小姐姐",t:"演出",io:0,pr:0,mp:2,dir:"南",col:"橙",d:"穿汉服去，出片率爆表",dur:"3h"},
+{n:"永兴坊摔碗酒+陕西小吃",t:"市集",io:0,pr:80,mp:2,dir:"东",col:"红",d:"肉夹馍凉皮羊肉泡，辣到过瘾",dur:"2h"},
+{n:"城墙根环城公园夜跑",t:"运动",io:0,pr:0,mp:1,dir:"北",col:"绿",d:"绕城墙一圈 14km，挑 5km 也行",dur:"2h"},
+{n:"钟楼书店慢递寄信",t:"文艺",io:1,pr:30,mp:1,dir:"中",col:"紫",d:"给一年后的自己写封信",dur:"1h"},
+{n:"易俗社百年秦腔剧场",t:"演出",io:1,pr:60,mp:2,dir:"中",col:"金",d:"听不懂没关系，气氛拉满",dur:"2h"},
+{n:"兴庆宫郁金香花海",t:"户外",io:0,pr:0,mp:1,dir:"东北",col:"紫",d:"3 月限定，出片机位多",dur:"2h"},
+{n:"回民街 biangbiang 面+定家小酥肉",t:"美食",io:1,pr:60,mp:2,dir:"西",col:"橙",d:"碳水炸弹+酸梅汤标配",dur:"1.5h"},
+{n:"曲江池遗址公园环湖徒步",t:"户外",io:0,pr:0,mp:1,dir:"西南",col:"绿",d:"夕阳时分手慢一点",dur:"3h"},
+{n:"西安博物院+小雁塔",t:"展览",io:1,pr:0,mp:1,dir:"中",col:"金",d:"比陕历博人少，文物一样硬",dur:"2.5h"},
+{n:"湘子庙街古着淘货",t:"市集",io:0,pr:50,mp:2,dir:"南",col:"紫",d:"vintage控的天堂",dur:"2h"},
+{n:"高家大院皮影戏",t:"演出",io:1,pr:50,mp:2,dir:"中",col:"红",d:"老西安人的童年记忆",dur:"1h"},
+{n:"大悦城屋顶天台看落日",t:"休闲",io:0,pr:0,mp:2,dir:"西北",col:"橙",d:"4 楼观景台，免费出大片",dur:"1h"},
+{n:"半坡国际艺术区涂鸦墙",t:"文艺",io:0,pr:0,mp:1,dir:"东",col:"青",d:"废墟美学+独立咖啡",dur:"2h"},
+{n:"汉城湖大风阁夜游",t:"户外",io:0,pr:0,mp:1,dir:"西北",col:"蓝",d:"汉武大帝雕像前的湖景",dur:"2h"},
+{n:"赛格国际小寨赛格天梯",t:"购物",io:1,pr:0,mp:2,dir:"南",col:"紫",d:"亚洲最长室内电梯",dur:"1h"},
+{n:"老钢厂设计创意产业园",t:"文艺",io:1,pr:0,mp:1,dir:"东北",col:"青",d:"工业风+独立书店+咖啡",dur:"2h"},
+{n:"华夏文旅海洋公园",t:"亲子",io:1,pr:180,mp:3,dir:"东",col:"蓝",d:"带对象/朋友的小型海洋馆",dur:"3h"},
+{n:"杜邑遗址公园+杜陵花海",t:"户外",io:0,pr:0,mp:1,dir:"南",col:"粉",d:"汉宣帝陵旁的春日花海",dur:"2h"},
+{n:"粉巷 LIVEHOUSE 听民谣",t:"演出",io:1,pr:120,mp:2,dir:"中",col:"紫",d:"周末有本地原创乐队演出",dur:"3h"},
+{n:"城西客运站剧本杀推理之夜",t:"休闲",io:1,pr:80,mp:3,dir:"西",col:"青",d:"4-6 人本，烧脑 3 小时",dur:"3h"},
+{n:"钟楼 VR 全感体验馆",t:"休闲",io:1,pr:98,mp:2,dir:"中",col:"蓝",d:"VR 过山车+全感电影",dur:"1.5h"},
+{n:"建国路老猫咖撸猫",t:"休闲",io:1,pr:50,mp:2,dir:"东",col:"橙",d:"30+ 只猫，治愈系天花板",dur:"1.5h"},
+{n:"未央湖欢乐跑 5km",t:"运动",io:0,pr:30,mp:2,dir:"北",col:"绿",d:"完成有奖牌+补给",dur:"2h"},
+{n:"碑林博物馆拓片体验",t:"文艺",io:1,pr:80,mp:1,dir:"中",col:"金",d:"亲手拓一张王羲之",dur:"2h"},
+{n:"护城河画舫夜游",t:"户外",io:0,pr:60,mp:2,dir:"北",col:"蓝",d:"夜幕下城墙倒影",dur:"1.5h"},
+{n:"交大西迁博物馆",t:"展览",io:1,pr:0,mp:1,dir:"西南",col:"金",d:"交大精神+历史展",dur:"1.5h"},
+{n:"大唐芙蓉园紫云楼夜景",t:"户外",io:0,pr:120,mp:2,dir:"西南",col:"紫",d:"灯光秀+汉服拍照",dur:"3h"},
+{n:"韦曲老街羊肉小炒",t:"美食",io:0,pr:60,mp:2,dir:"南",col:"红",d:"本地人私藏苍蝇馆子",dur:"1.5h"},
+{n:"浐灞国家湿地公园",t:"户外",io:0,pr:0,mp:1,dir:"东",col:"绿",d:"候鸟+芦苇荡",dur:"3h"},
+{n:"skp 商场顶楼艺术展",t:"展览",io:1,pr:0,mp:1,dir:"中",col:"金",d:"每月换主题，免费看展",dur:"1h"},
+{n:"西安音乐厅古典乐之夜",t:"演出",io:1,pr:180,mp:2,dir:"中",col:"蓝",d:"陕西爱乐乐团驻场",dur:"2h"},
+{n:"护城河边汉服拍照+城墙旅拍",t:"文艺",io:0,pr:200,mp:2,dir:"北",col:"粉",d:"妆造+摄影一条龙",dur:"2h"},
+{n:"永宁门城墙骑行",t:"运动",io:0,pr:40,mp:2,dir:"中",col:"橙",d:"租自行车绕城半圈",dur:"2h"},
+{n:"白鹿原影视城+簸箕宴",t:"户外",io:0,pr:150,mp:3,dir:"东南",col:"金",d:"白鹿原同款拍摄地",dur:"4h"},
+{n:"木塔寺公园读书野餐",t:"户外",io:0,pr:0,mp:1,dir:"西南",col:"绿",d:"安静的绿地，适合独处充电",dur:"2h"},
+{n:"Open Mic 开放麦脱口秀",t:"演出",io:1,pr:50,mp:2,dir:"中",col:"红",d:"周末脱口秀俱乐部驻场",dur:"1.5h"},
+{n:"大唐西市博物馆+丝绸之路展",t:"展览",io:1,pr:0,mp:1,dir:"西",col:"金",d:"丝绸之路起点就在这",dur:"2h"},
+{n:"曲江书城+独立咖啡",t:"文艺",io:1,pr:0,mp:1,dir:"西南",col:"青",d:"网红书店，安静发呆",dur:"2h"},
+{n:"西安城墙国际音乐节",t:"演出",io:0,pr:280,mp:2,dir:"中",col:"紫",d:"年度大型户外音乐节",dur:"5h"},
+{n:"凯德广场室内攀岩馆",t:"运动",io:1,pr:80,mp:1,dir:"南",col:"红",d:"初学者也能上 5 米",dur:"2h"},
+{n:"阿房宫遗址公园考古徒步",t:"户外",io:0,pr:0,mp:1,dir:"西",col:"金",d:"秦朝宫殿遗址+考古体验",dur:"3h"},
+{n:"T11 商场顶层旋转餐厅",t:"美食",io:1,pr:298,mp:2,dir:"中",col:"金",d:"高空看西安全景",dur:"2h"},
+{n:"老菜市市集手作体验",t:"市集",io:0,pr:80,mp:2,dir:"中",col:"橙",d:"皮具体验+古着混搭",dur:"2h"},
+{n:"顺城巷咖啡馆慢游",t:"休闲",io:1,pr:50,mp:1,dir:"中",col:"棕",d:"城墙根下的独立咖啡",dur:"2h"},
+{n:"骊山老母殿徒步+日出",t:"户外",io:0,pr:0,mp:2,dir:"东",col:"金",d:"凌晨爬山看关中平原",dur:"4h"},
+{n:"小雁塔荐福寺古琴雅集",t:"演出",io:1,pr:80,mp:1,dir:"中",col:"金",d:"古琴名家+禅意",dur:"1.5h"},
+{n:"高新大都荟独立电影放映",t:"演出",io:1,pr:60,mp:2,dir:"西南",col:"蓝",d:"小众文艺片首选",dur:"2h"},
+{n:"北郊城市运动公园滑板",t:"运动",io:0,pr:0,mp:2,dir:"北",col:"橙",d:"免费滑板场+板友交流",dur:"2h"},
+{n:"钟鼓楼广场汉服夜游",t:"文艺",io:0,pr:0,mp:2,dir:"中",col:"金",d:"夜间灯光下汉服出片",dur:"1.5h"},
+{n:"纺织城艺术区+老厂房探秘",t:"文艺",io:1,pr:0,mp:2,dir:"东",col:"青",d:"老国企改造的艺术区",dur:"2h"},
+{n:"长安书院茶道体验",t:"文艺",io:1,pr:120,mp:1,dir:"西南",col:"绿",d:"宋代点茶+茶果子",dur:"2h"},
+{n:"鲸鱼沟竹海徒步",t:"户外",io:0,pr:0,mp:2,dir:"东南",col:"绿",d:"白鹿原旁的竹林秘境",dur:"3h"}
+];
+
+var ZODIAC=[
+{n:"白羊座",c:"#ff6b9d",e:"火星 · 行动派"},
+{n:"金牛座",c:"#ffd93d",e:"金星 · 感官派"},
+{n:"双子座",c:"#4ecdc4",e:"水星 · 好奇派"},
+{n:"巨蟹座",c:"#a78bfa",e:"月亮 · 怀旧派"},
+{n:"狮子座",c:"#ff9f43",e:"太阳 · 表现派"},
+{n:"处女座",c:"#95e1d3",e:"水星 · 细节派"},
+{n:"天秤座",c:"#f8a5c2",e:"金星 · 平衡派"},
+{n:"天蝎座",c:"#c0392b",e:"冥王星 · 深度派"},
+{n:"射手座",c:"#f39c12",e:"木星 · 自由派"},
+{n:"摩羯座",c:"#5f6c7b",e:"土星 · 务实派"},
+{n:"水瓶座",c:"#3498db",e:"天王星 · 革新派"},
+{n:"双鱼座",c:"#9b59b6",e:"海王星 · 浪漫派"}
+];
+
+var PREFS=[
+{n:"展览",k:"展览"},{n:"演出",k:"演出"},{n:"市集",k:"市集"},{n:"户外",k:"户外"},
+{n:"运动",k:"运动"},{n:"美食",k:"美食"},{n:"文艺",k:"文艺"},{n:"休闲",k:"休闲"},
+{n:"亲子",k:"亲子"}
+];
+
+var S={zodiac:-1,pref:null,budget:150,people:1,weather:"sunny"};
+
+var TOP3=[];
+
+// LCG 种子（按日期 + 星座生成，同一天同一星座结果一致）
+function todaySeed(){var d=new Date();return d.getFullYear()*10000+(d.getMonth()+1)*100+d.getDate()}
+function l(z){var s=todaySeed()*131+z*104729;s=(s*1103515245+12345)&0x7fffffff;return s}
+function pick(arr,z){return arr[l(z)%arr.length]}
+var DIRS=["东南","南","东","北","东北","西南","西","西北"];
+var COLS=["金","粉","紫","蓝","绿","橙","红","青"];
+var FOODS=["烧烤","火锅","奶茶","炸鸡","轻食沙拉","甜品","夜宵小馄饨","咖啡+可颂"];
+var RITUALS=["出门前深呼吸 3 次","带一杯温水","给朋友发句早安","带本想看很久的书","戴一顶好看的帽子","穿新袜子","带耳机听一首喜欢的歌","口袋里放一颗糖"];
+function lucky(z){return{dir:pick(DIRS,z),col:pick(COLS,z+1),food:pick(FOODS,z+2),ritual:pick(RITUALS,z+3)}}
+
+function renderZodiac(){
+var row=document.getElementById("zrow");row.innerHTML="";
+for(var i=0;i<ZODIAC.length;i++){
+(function(idx){
+var d=document.createElement("div");
+d.className="chip";d.textContent=ZODIAC[idx].n;
+d.style.borderColor=ZODIAC[idx].c;
+d.onclick=function(){S.zodiac=idx;renderZodiac();renderLuck()};
+if(S.zodiac===idx){d.className+=" on";d.style.background=ZODIAC[idx].c}
+row.appendChild(d);
+})(i)}
+}
+
+function renderLuck(){
+var box=document.getElementById("luckBox");
+if(S.zodiac<0){box.style.display="none";return}
+var lk=lucky(S.zodiac);
+box.style.display="block";
+var html=[];
+html.push('<span class="pill">方位 · '+lk.dir+'</span>');
+html.push('<span class="pill c">色 · '+lk.col+'</span>');
+html.push('<span class="pill p">食 · '+lk.food+'</span>');
+html.push('<span class="pill o">仪 · '+lk.ritual+'</span>');
+document.getElementById("luckList").innerHTML=html.join("");
+}
+
+function renderPrefs(){
+var row=document.getElementById("prow");row.innerHTML="";
+for(var i=0;i<PREFS.length;i++){
+(function(idx){
+var d=document.createElement("div");
+d.className="chip";d.textContent=PREFS[idx].n;
+d.onclick=function(){S.pref=PREFS[idx].k;renderPrefs()};
+if(S.pref===PREFS[idx].k){d.className+=" on"}
+row.appendChild(d);
+})(i)}
+}
+
+function renderPeople(){
+var row=document.getElementById("peorow");row.innerHTML="";
+var opts=[{v:1,l:"1人"},{v:2,l:"2人"},{v:3,l:"3人+"},{v:0,l:"一群人"}];
+for(var i=0;i<opts.length;i++){
+(function(o){
+var d=document.createElement("div");
+d.className="chip";d.textContent=o.l;
+d.dataset.pp=o.v;
+d.onclick=function(){S.people=o.v;renderPeople()};
+if(S.people===o.v)d.className+=" on";
+row.appendChild(d);
+})(opts[i])}
+}
+
+function renderWeather(){
+var row=document.getElementById("wrow");row.innerHTML="";
+var opts=[{v:"sunny",l:"☀️ 晴"},{v:"cloudy",l:"⛅ 多云"},{v:"rainy",l:"🌧️ 雨"}];
+for(var i=0;i<opts.length;i++){
+(function(o){
+var d=document.createElement("div");
+d.className="chip";d.textContent=o.l;
+d.dataset.w=o.v;
+d.onclick=function(){S.weather=o.v;renderWeather()};
+if(S.weather===o.v)d.className+=" on";
+row.appendChild(d);
+})(opts[i])}
+}
+
+document.getElementById("budr").oninput=function(){S.budget=parseInt(this.value);document.getElementById("budv").textContent="¥"+S.budget}
+
+function scoreAct(a){
+var sc=0;var reasons=[];
+if(S.pref&&a.t===S.pref){sc+=35;reasons.push("偏好匹配「"+S.pref+"」")}
+if(a.pr<=S.budget){sc+=25;reasons.push("预算内（≤¥"+S.budget+"）")}
+else{sc-=10;reasons.push("超预算 ¥"+(a.pr-S.budget))}
+if(S.weather==="rainy"&&a.io===1){sc+=20;reasons.push("雨天自动选室内")}
+else if(S.weather!=="rainy"&&a.io===0){sc+=15;reasons.push("天气好适合户外")}
+else if(S.weather==="rainy"&&a.io===0){sc-=20;reasons.push("雨天户外谨慎")}
+if(S.people>=3&&a.mp>=3){sc+=10;reasons.push("适合"+S.people+"人成团")}
+else if(S.people<=2&&a.mp<=2){sc+=10;reasons.push("人数匹配")}
+else if(S.people>=3&&a.mp<3){sc-=5;reasons.push("更适合小群体")}
+if(S.zodiac>=0){
+var lk=lucky(S.zodiac);
+if(a.dir===lk.dir){sc+=15;reasons.push("方位「"+lk.dir+"」是"+ZODIAC[S.zodiac].n+"今日幸运位")}
+if(a.col===lk.col){sc+=5;reasons.push("配色命中"+lk.col+"幸运色")}
+}
+sc+=Math.floor(Math.random()*18);
+return{a:a,sc:sc,reasons:reasons}
+}
+
+function recommend(){
+if(S.pref===null){toast("先选一个偏好再开始呀～","err");return}
+if(S.zodiac<0){toast("选个星座激活幸运加成吧～","err");return}
+var pool=ACTS.filter(function(a){return a.pr<=S.budget||S.budget===500});
+var scored=pool.map(scoreAct).sort(function(x,y){return y.sc-x.sc}).slice(0,3);
+TOP3=scored;
+renderRes("reswrap");
+renderRes("reswrap2");
+toast("✦ 你的周末已就绪","");
+showPanel("p2");
+}
+
+function renderRes(wid){
+var box=document.getElementById(wid);if(!box)return;
+if(!TOP3.length){box.innerHTML='<div class="abt" style="color:#6c6c8a;text-align:center;padding:20px">—— 等待你的冒险 ——</div>';return}
+var medals=["🥇 #1 BEST","🥈 #2","🥉 #3"];
+var html=[];
+for(var i=0;i<TOP3.length;i++){
+var s=TOP3[i];var a=s.a||s;var rs=s.reasons||s.a&&[];
+if(!s.a){a=s;rs=scoreAct(s).reasons}
+var ii=ACTS.indexOf(a);
+html.push('<div class="r'+(i===0?' fated':'')+'">');
+html.push('<span class="tag'+(i>0?' s'+(i+1):'')+'">'+medals[i]+'</span>');
+html.push('<h3>'+a.n+'</h3>');
+html.push('<div class="meta">'+a.t+' · '+a.dur+' · ¥'+a.pr+' · 方位'+a.dir+' · 同行'+a.mp+'人</div>');
+html.push('<div class="why"><b>为什么推荐你：</b><br>'+rs.map(function(r){return '· '+r}).join('<br>')+'</div>');
+if(i===0)html.push('<button class="mini gold" onclick="checkin(\''+a.n+'\')">📸 打卡这个</button>');
+html.push('<button class="mini pink" onclick="shareOne('+ACTS.indexOf(a)+')">📤 生成攻略卡</button></div>');
+}
+box.innerHTML=html.join("");
+}
+
+function draw(){
+var pool=ACTS.filter(function(a){return a.pr<=S.budget||S.budget===500});
+var scored=pool.map(scoreAct).sort(function(x,y){return y.sc-x.sc}).slice(0,8);
+var pick=scored[Math.floor(Math.random()*scored.length)];
+var a=pick.a||pick;
+document.getElementById("tarotArea").innerHTML='<div class="tarotcard flip">🃏</div>';
+setTimeout(function(){
+var lk=S.zodiac>=0?lucky(S.zodiac):null;
+var reasonText=[];
+reasonText.push("命中「"+a.t+"」类活动 · 评分 "+pick.sc);
+reasonText.push("价位 ¥"+a.pr+(a.pr===0?" 免费":""));reasonText.push("耗时 "+a.dur);
+if(lk&&a.dir===lk.dir)reasonText.push("方位「"+a.dir+"」是你的幸运位");
+if(S.weather==="rainy"&&a.io===1)reasonText.push("下雨天友好（室内）");
+document.getElementById("tarotRes").innerHTML='<div class="tarot-res"><h3>✦ 命运之选 · '+a.n+'</h3><div class="res-meta">'+a.t+' · '+a.dur+' · ¥'+a.pr+'</div><div class="res-why"><b>这是命定的周末：</b><br>'+reasonText.join('<br>· ')+'</div><button class="mini gold" onclick="checkin(\''+a.n+'\')">📸 收下这份冒险</button></div>';
+toast("🃏 命运已翻牌","");
+},600)
+}
+
+function checkin(name){
+var list=JSON.parse(localStorage.getItem("ck")||"[]");
+list.push({n:name,t:Date.now()});
+localStorage.setItem("ck",JSON.stringify(list));
+toast("✦ 已打卡 · "+name,"");
+renderCheckins();
+}
+
+function renderCheckins(){
+var list=JSON.parse(localStorage.getItem("ck")||"[]");
+var box=document.getElementById("cklist");
+var stats={};list.forEach(function(c){stats[c.n]=(stats[c.n]||0)+1});
+var cats={};list.forEach(function(c){var a=ACTS.find(function(x){return x.n===c.n});if(a)cats[a.t]=(cats[a.t]||0)+1});
+document.getElementById("stat").innerHTML=
+'<div class="s"><b>'+list.length+'</b>次冒险</div>'+
+'<div class="s"><b>'+Object.keys(stats).length+'</b>个不同地点</div>'+
+'<div class="s"><b>'+(list.length>0?Math.round(list.length/Object.keys(stats).length*10)/10:0)+'</b>平均复访</div>'+
+(list.length>0?'<div class="s"><b>'+Object.keys(cats).sort(function(a,b){return cats[b]-cats[a]})[0]+'</b>最爱类型</div>':'');
+box.innerHTML=list.length===0?'<div class="abt" style="color:#6c6c8a;text-align:center;padding:20px">—— 还没有打卡记录 ——</div>':list.slice(-10).reverse().map(function(c){var a=ACTS.find(function(x){return x.n===c.n});return'<div class="party">📍 '+c.n+(a?' <span style="color:#b9b9d6">· '+a.t+' · ¥'+a.pr+'</span>':'')+' <span style="float:right;color:#6c6c8a">'+new Date(c.t).toLocaleDateString()+'</span></div>'}).join("");
+document.getElementById("sharearea").innerHTML='<button class="btn cy" onclick="shareWeek()">📤 生成探索周报分享卡</button>'+(list.length>0?'<button class="btn pink" onclick="clearCks()">🗑️ 清空足迹</button>':'');
+}
+
+function clearCks(){if(confirm("确定清空所有打卡记录？")){localStorage.removeItem("ck");renderCheckins();toast("✦ 已清空","")}}
+
+function shareWeek(){
+var list=JSON.parse(localStorage.getItem("ck")||"[]");
+if(list.length===0){toast("还没有打卡记录可分享～","err");return}
+var cats={};list.forEach(function(c){var a=ACTS.find(function(x){return x.n===c.n});if(a)cats[a.t]=(cats[a.t]||0)+1});
+var top=Object.keys(cats).sort(function(a,b){return cats[b]-cats[a]}).slice(0,3);
+var html='【我的周末探索周报】 ✦ CITY EXPLORER\n';
+html+='━━━━━━━━━━━━━━━━\n';
+html+='本月冒险 '+list.length+' 次\n';
+html+='最爱类型：'+top.join(' / ')+'\n';
+html+='足迹地点：'+Object.keys(list.reduce(function(m,c){m[c.n]=1;return m},{})).slice(0,3).join(' / ')+'...\n';
+html+='━━━━━━━━━━━━━━━━\n';
+html+='同款指南：https://2991d7fca27f4d488d8b2659460df868.app.workbuddy.host';
+document.getElementById("cklist").innerHTML+='<div class="weekcard" id="weekcard">'+html+'</div>';
+document.getElementById("sharearea").innerHTML='<button class="btn gold" onclick="copyTxt(this)" data-t="'+encodeURIComponent(html)+'">📋 复制文字</button> <a class="mini cy" style="text-decoration:none;display:inline-block" href="data:text/plain;charset=utf-8,'+encodeURIComponent(html)+'" download="weekend.txt">⬇️ 下载</a>';
+}
+
+function copyTxt(btn){
+var txt=decodeURIComponent(btn.dataset.t);
+navigator.clipboard.writeText(txt).then(function(){toast("✦ 已复制到剪贴板","")}).catch(function(){toast("复制失败，请手动选择","err")})
+}
+
+function shareOne(idx){
+var a=ACTS[idx];if(!a)return;
+var txt='【我的周末之选】 ✦ CITY EXPLORER\n'+a.n+'\n'+a.t+' · '+a.dur+' · ¥'+a.pr+'\n'+a.d+'\n━━━━━━━━━━━━━━━━\n同款指南：https://2991d7fca27f4d488d8b2659460df868.app.workbuddy.host';
+navigator.clipboard.writeText(txt).then(function(){toast("✦ 已复制攻略卡","")}).catch(function(){toast("复制失败","err")})
+}
+
+function toast(msg,type){
+var t=document.getElementById("toast");
+t.textContent=msg;
+t.className="toast show"+(type==="err"?" err":"");
+setTimeout(function(){t.className="toast"},1800)
+}
+
+function showPanel(id){
+var ts=document.querySelectorAll(".tab");var ps=document.querySelectorAll(".panel");
+for(var i=0;i<ts.length;i++){ts[i].classList.toggle("on",ts[i].dataset.p===id)}
+for(var i=0;i<ps.length;i++){ps[i].classList.toggle("on",ps[i].id===id)}
+}
+
+// ===== 星空 + 流星背景 =====
+(function(){
+var cv=document.getElementById('starfield'),ctx=cv.getContext('2d');
+function rs(){cv.width=innerWidth;cv.height=innerHeight}
+rs();addEventListener('resize',rs);
+var stars=[];
+for(var i=0;i<160;i++){
+stars.push({
+x:Math.random()*cv.width,y:Math.random()*cv.height,
+r:Math.random()*1.4+.4,
+c:Math.random()<.15?'#ffd93d':Math.random()<.5?'#4ecdc4':'#fff',
+s:Math.random()*1.5+.5,ph:Math.random()*Math.PI*2
+});
+}
+function loop(t){
+ctx.clearRect(0,0,cv.width,cv.height);
+for(var i=0;i<stars.length;i++){
+var s=stars[i];
+var a=.4+Math.sin(t/1000*s.s+s.ph)*.5;
+ctx.globalAlpha=a;
+ctx.fillStyle=s.c;
+ctx.beginPath();
+ctx.arc(s.x,s.y,s.r,0,Math.PI*2);
+ctx.fill();
+if(s.r>1.2){ctx.shadowBlur=6;ctx.shadowColor=s.c}
+else ctx.shadowBlur=0;
+}
+// 流星（每隔一段时间随机位置画一条）
+if(Math.random()<.004){
+var sx=Math.random()*cv.width*.6,sy=Math.random()*cv.height*.3;
+var g=ctx.createLinearGradient(sx,sy,sx+140,sy+90);
+g.addColorStop(0,'rgba(255,255,255,0)');g.addColorStop(.5,'rgba(255,217,61,.9)');g.addColorStop(1,'rgba(167,139,250,0)');
+ctx.globalAlpha=1;ctx.fillStyle=g;ctx.shadowBlur=0;
+ctx.fillRect(sx,sy,140,2);
+}
+requestAnimationFrame(loop);
+}
+loop(0);
+})();
+
+// ===== 增强流星系统（粒子拖尾）=====
+var shoots=[];
+function spawnMeteor(){
+var big=Math.random()<.18;
+shoots.push({
+sx:Math.random()*innerWidth*.6,sy:Math.random()*innerHeight*.3,
+vx:7+(big?3:0),vy:5+(big?2:0),
+color:['#ffd93d','#a78bfa','#4ecdc4','#fff','#ff9f43'][Math.floor(Math.random()*5)],
+headR:big?2.8:2,trail:big?24:15,life:big?120:75,
+maxLife:big?120:75,born:6,fadeOut:big?18:12
+});
+if(shoots.length>3)shoots.shift();
+}
+setInterval(spawnMeteor,900);
+
+(function(){
+var cv=document.getElementById('starfield'),ctx=cv.getContext('2d');
+function loop2(){
+ctx.globalAlpha=1;ctx.shadowBlur=0;
+for(var i=shoots.length-1;i>=0;i--){
+var m=shoots[i];m.life--;
+m.sx+=m.vx;m.sy+=m.vy;
+// 渲染拖尾粒子（递减大小+不透明度）
+for(var k=0;k<m.trail;k++){
+var tk=m.trail-1-k;
+var px=m.sx-m.vx*tk*0.75,py=m.sy-m.vy*tk*0.75;
+var fadeIn=k<m.born?k/m.born:1;
+var fadeOut=k>m.life?Math.max(0,(m.trail-k)/m.fadeOut):1;
+var a=fadeIn*fadeOut*(1-k/m.trail)*0.85;
+if(a<=0)continue;
+ctx.globalAlpha=a;
+ctx.fillStyle=m.color;
+ctx.beginPath();ctx.arc(px,py,(m.headR)*(1-k/m.trail)*0.9,0,Math.PI*2);ctx.fill();
+}
+// 头部亮核 + 白热点
+ctx.globalAlpha=1;ctx.fillStyle='#fff';
+ctx.shadowBlur=18;ctx.shadowColor=m.color;
+ctx.beginPath();ctx.arc(m.sx,m.sy,m.headR*0.5,0,Math.PI*2);ctx.fill();
+ctx.shadowBlur=0;
+if(m.life<=0)shoots.splice(i,1);
+}
+requestAnimationFrame(loop2);
+}
+loop2();
+})();
+</script>
+</body>
+</html>
