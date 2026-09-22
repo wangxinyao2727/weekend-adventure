@@ -3,6 +3,8 @@
 > 一个为大学生打造的周末活动推荐 H5：1 分钟填偏好，拿到 3 个「有理由」的周末方案。
 > 从 PRD 设计到部署上线全程由 AI Coding 协作完成，**3 小时内独立交付**。
 
+**🔗 在线体验：[wangxinyao2727.github.io/weekend-adventure](https://wangxinyao2727.github.io/weekend-adventure/)**
+
 ## 🎯 解决什么问题
 
 大学生周末决策成本高：去哪玩、几个人去、天气/预算影响大，朋友圈/小红书信息分散且不可量化。
