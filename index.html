@@ -514,6 +514,10 @@ renderZodiac();
 renderPrefs();
 renderPeople();
 renderWeather();
+renderCheckins();
+// 顶部Tab点击切换
+var _tabs=document.querySelectorAll(".tab");
+[].forEach.call(_tabs,function(t){t.onclick=function(){showPanel(t.dataset.p)}});
 
 function scoreAct(a){
 var sc=0;var reasons=[];
