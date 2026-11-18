@@ -433,7 +433,15 @@ var TOP3=[];
 
 // LCG 种子（按日期 + 星座生成，同一天同一星座结果一致）
 function todaySeed(){var d=new Date();return d.getFullYear()*10000+(d.getMonth()+1)*100+d.getDate()}
-function l(z){var s=todaySeed()*131+z*104729;s=(s*1103515245+12345)&0x7fffffff;return s}
+function l(z){
+// Math.imul 做精确 int32 乘法，避免超出安全整数导致低位精度丢失
+var s=(todaySeed()%100000)+z*7919;
+s=Math.imul(s^61,2654435761);
+s^=s>>>13;
+s=Math.imul(s,1274126177);
+s^=s>>>16;
+return s>>>0;
+}
 function pick(arr,z){return arr[l(z)%arr.length]}
 var DIRS=["东南","南","东","北","东北","西南","西","西北"];
 var COLS=["金","粉","紫","蓝","绿","橙","红","青"];
