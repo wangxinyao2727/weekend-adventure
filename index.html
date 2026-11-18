@@ -509,6 +509,12 @@ row.appendChild(d);
 
 document.getElementById("budr").oninput=function(){S.budget=parseInt(this.value);document.getElementById("budv").textContent="¥"+S.budget}
 
+// ===== 初始化渲染 =====
+renderZodiac();
+renderPrefs();
+renderPeople();
+renderWeather();
+
 function scoreAct(a){
 var sc=0;var reasons=[];
 if(S.pref&&a.t===S.pref){sc+=35;reasons.push("偏好匹配「"+S.pref+"」")}
